@@ -139,3 +139,5 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 alias mobi="$HOME/Projects/qubix/intergast/igon360/mobi"
 alias mu="$HOME/Projects/qubix/intergast/igon360/mobi up"
 alias md="$HOME/Projects/qubix/intergast/igon360/mobi stop"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
