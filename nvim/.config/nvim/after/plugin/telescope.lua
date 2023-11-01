@@ -31,7 +31,12 @@ vim.keymap.set('n', '<leader>/', function()
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
 
-vim.keymap.set('n', '<leader>fd', function()
-  builtin.grep_string { search_dirs = {vim.fn.expand('%:p:h')} }
-end, {})
+--vim.keymap.set('n', '<leader>fd', function()
+  --builtin.grep_string { search_dirs = {vim.fn.expand('%:p:h')} }
+--end, {})
 
+
+require("telescope").load_extension("dir")
+
+vim.keymap.set("n", "<leader>fd", "<cmd>Telescope dir live_grep<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>pd", "<cmd>Telescope dir find_files<CR>", { noremap = true, silent = true })

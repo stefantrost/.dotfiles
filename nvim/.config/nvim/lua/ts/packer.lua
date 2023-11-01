@@ -30,6 +30,7 @@ return require('packer').startup(function(use)
   use('nvim-treesitter/playground')
   use('nvim-treesitter/nvim-treesitter-context')
   use('ThePrimeagen/harpoon')
+  use('ThePrimeagen/git-worktree.nvim')
   use('mbbill/undotree')
   use('tpope/vim-fugitive')
   use {
@@ -64,6 +65,20 @@ return require('packer').startup(function(use)
       require("nx").setup {}
     end
   }
+
+  use({
+  "princejoogie/dir-telescope.nvim",
+  -- telescope.nvim is a required dependency
+  requires = {"nvim-telescope/telescope.nvim"},
+  config = function()
+    require("dir-telescope").setup({
+      -- these are the default options set
+      hidden = true,
+      no_ignore = false,
+      show_preview = true,
+    })
+  end,
+})
   --use('cohama/lexima.vim')
   use {
 	"windwp/nvim-autopairs",
