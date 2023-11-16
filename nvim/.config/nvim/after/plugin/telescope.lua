@@ -6,6 +6,9 @@ require('telescope').setup{
       i = {
         ["<leader><CR>"] = actions.select_vertical,
       }
+    },
+    path_display = {
+      'truncate'
     }
   }
 
@@ -18,6 +21,8 @@ vim.keymap.set('n', '<leader>gf', builtin.git_files, {})
 vim.keymap.set('n', '<leader>ps', function ()
 	builtin.grep_string({ search = vim.fn.input("Grep > ") });
 end)
+vim.keymap.set('n', '<leader>fb', builtin.git_branches, {})
+vim.keymap.set('n', '<leader>fm', builtin.git_branches, {})
 vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
 vim.keymap.set('n', '<leader>fo', builtin.oldfiles, { desc = '[F]ind recently [o]pened files' })

@@ -67,23 +67,23 @@ return require('packer').startup(function(use)
   }
 
   use({
-  "princejoogie/dir-telescope.nvim",
-  -- telescope.nvim is a required dependency
-  requires = {"nvim-telescope/telescope.nvim"},
-  config = function()
-    require("dir-telescope").setup({
-      -- these are the default options set
-      hidden = true,
-      no_ignore = false,
-      show_preview = true,
-    })
-  end,
-})
+    "princejoogie/dir-telescope.nvim",
+    -- telescope.nvim is a required dependency
+    requires = {"nvim-telescope/telescope.nvim"},
+    config = function()
+      require("dir-telescope").setup({
+        -- these are the default options set
+        hidden = true,
+        no_ignore = false,
+        show_preview = true,
+      })
+    end,
+  })
   --use('cohama/lexima.vim')
   use {
-	"windwp/nvim-autopairs",
+    "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
-}
+  }
   use "windwp/nvim-ts-autotag"
   use 'nvim-tree/nvim-web-devicons'
   use{'nvim-lualine/lualine.nvim',
