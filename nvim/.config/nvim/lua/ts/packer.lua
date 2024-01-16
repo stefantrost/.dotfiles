@@ -30,9 +30,9 @@ return require('packer').startup(function(use)
   use('nvim-treesitter/playground')
   use('nvim-treesitter/nvim-treesitter-context')
   use('ThePrimeagen/harpoon')
-  use('ThePrimeagen/git-worktree.nvim')
   use('mbbill/undotree')
   use('tpope/vim-fugitive')
+  use('joerdav/templ.vim')
   use {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v3.x',

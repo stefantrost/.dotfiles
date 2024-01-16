@@ -17,8 +17,8 @@ lsp.on_attach(function(client,bufnr)
   vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
   vim.keymap.set('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
 
-  vim.keymap.set('n', 'nd', '<cmd>lua vim.diagnostic.goto_prev()<cr>', opts)
-  vim.keymap.set('n', 'pd', '<cmd>lua vim.diagnostic.goto_next()<cr>', opts)
+  vim.keymap.set('n', '<leader>nd', '<cmd>lua vim.diagnostic.goto_prev()<cr>', opts)
+  vim.keymap.set('n', '<leader>pd', '<cmd>lua vim.diagnostic.goto_next()<cr>', opts)
 
   -- for OrganizeImports
   vim.keymap.set("n", "<leader>i", ":OrganizeImports<CR>")
@@ -55,6 +55,22 @@ cmp.setup({
     ['<C-d>'] = cmp.mapping.scroll_docs(4),
   })
 })
+
+local configs = require('lspconfig/configs')
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+lspconfig.emmet_ls.setup({
+  capabilities = capabilities,
+  filetypes = { "css", "html", "javascript", "vue", "scss", "templ"},
+  init_options = {
+    html = {
+      options = {
+        ["bem.enabled"] = true,
+      },
+    },
+  }
+})
+
 
 --[[
 local dot_git_path = vim.fn.finddir(".git", ".;")
@@ -126,6 +142,24 @@ lspconfig.tsserver.setup {
     }
   }
 }
+
+lspconfig.sqls.setup{
+  on_attach = function (client, bufnr)
+    require('sqls').on_attach(client, bufnr)
+  end
+}
+
+lspconfig.gopls.setup({
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+      },
+      staticcheck = true,
+      gofumpt = true,
+    },
+  },
+})
 
 lsp.setup()
 

@@ -1,12 +1,19 @@
-  -- Set leader
+-- Set leader
 vim.g.mapleader = " "
+-- Colemak remappings
+vim.keymap.set({"n", "v"}, "m", "h")
+vim.keymap.set({"n", "v"}, "n", "j")
+vim.keymap.set({"n", "v"}, "e", "k")
+vim.keymap.set({"n", "v"}, "i", "l")
+vim.keymap.set({"n", "v"}, "l", "i")
+vim.keymap.set({"n", "v"}, "L", "I")
 
 -- Open file tree
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>ft", vim.cmd.Ex)
 
 -- move highlighted lines up/down
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set("v", "N", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "E", ":m '<-2<CR>gv=gv")
 
 
 -- keep cursor in position, when appending next line to this line
@@ -17,8 +24,8 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
 -- show found word mid screen when jumping to next/prev
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
+vim.keymap.set("n", "<leader>n", "nzzzv")
+vim.keymap.set("n", "<leader>N", "Nzzzv")
 
 -- keep word in paste buffer when replacing other word
 vim.keymap.set("x", "<leader>p", "\"_dP")
@@ -35,11 +42,11 @@ vim.keymap.set("v", "<leader>d", "\"_d")
 -- quickfix list???
 vim.keymap.set("n", "<leader>qf", ":copen<CR>")
 vim.keymap.set("n", "<leader>qc", ":cclose<CR>")
-vim.keymap.set("n", "<C-j>", "<cmd>cnext<CR>zz")
-vim.keymap.set("n", "<C-k>", "<cmd>cprev<CR>zz")
+vim.keymap.set("n", "<C-n>", "<cmd>cnext<CR>zz")
+vim.keymap.set("n", "<C-e>", "<cmd>cprev<CR>zz")
 -- location list 
-vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
-vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
+--vim.keymap.set("n", "<leader>e", "<cmd>lnext<CR>zz")
+--vim.keymap.set("n", "<leader>n", "<cmd>lprev<CR>zz")
 
 vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 

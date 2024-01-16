@@ -113,6 +113,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# source ~/.mobi_aliases
+
 #Alias for python
 alias python=python3
 alias ppip:i="python -m pip install"
@@ -139,8 +141,11 @@ export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
 # Alias for MOBI
-alias mobi="$HOME/Projects/qubix/intergast/igon360/mobi"
+# alias mobi="$HOME/Projects/qubix/intergast/igon360/mobi"
 alias mu="$HOME/Projects/qubix/intergast/igon360/mobi up"
 alias md="$HOME/Projects/qubix/intergast/igon360/mobi stop"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
