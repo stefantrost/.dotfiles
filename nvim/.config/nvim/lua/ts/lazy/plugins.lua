@@ -12,14 +12,18 @@ return {
     end
   },
   'mbbill/undotree',
-  'ThePrimeagen/harpoon',
+  {
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = { 'nvim-lua/plenary.nvim' }
+  },
   'nvim-treesitter/playground',
   'nvim-treesitter/nvim-treesitter-context',
   'folke/neodev.nvim',
   'eslint/eslint',
   {
     'Equilibris/nx.nvim',
-    requires = {
+    dependencies = {
       'nvim-telescope/telescope.nvim',
     },
     config = function()
@@ -29,7 +33,7 @@ return {
   {
     "princejoogie/dir-telescope.nvim",
     -- telescope.nvim is a required dependency
-    requires = {"nvim-telescope/telescope.nvim"},
+    dependencies = {"nvim-telescope/telescope.nvim"},
     config = function()
       require("dir-telescope").setup({
         -- these are the default options set
