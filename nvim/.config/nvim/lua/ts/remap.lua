@@ -2,7 +2,7 @@
 vim.g.mapleader = " "
 
 -- Open file tree
-vim.keymap.set("n", "<leader>fe", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>fe", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 -- move highlighted lines up/down
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")

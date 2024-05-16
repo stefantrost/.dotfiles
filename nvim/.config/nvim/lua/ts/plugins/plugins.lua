@@ -12,11 +12,6 @@ return {
     end
   },
   'mbbill/undotree',
-  {
-    'ThePrimeagen/harpoon',
-    branch = 'harpoon2',
-    dependencies = { 'nvim-lua/plenary.nvim' }
-  },
   'nvim-treesitter/playground',
   'nvim-treesitter/nvim-treesitter-context',
   'folke/neodev.nvim',
