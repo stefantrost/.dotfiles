@@ -8,4 +8,6 @@ require("ts.harpoon")
 require("ts.lsp")
 require("ts.trouble")
 require("ts.undotree")
+require("ts.ng")
+require("ts.nx")
 

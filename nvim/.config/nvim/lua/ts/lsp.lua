@@ -55,6 +55,13 @@ end
 lspconfig.tsserver.setup {
   on_attach = lsp.on_attach,
   capabilities = lsp.capabilities,
+  init_options = {
+    preferences = {
+      -- other preferences... 
+      importModuleSpecifierPreference = 'relative',
+      importModuleSpecifierEnding = 'minimal',
+    },
+  },
   commands = {
     OrganizeImports = {
       organize_imports,
@@ -68,16 +75,3 @@ lspconfig.sqls.setup{
     require('sqls').on_attach(client, bufnr)
   end
 }
-
-lspconfig.gopls.setup({
-  settings = {
-    gopls = {
-      analyses = {
-        unusedparams = true,
-      },
-      staticcheck = true,
-      gofumpt = true,
-    },
-  },
-})
-

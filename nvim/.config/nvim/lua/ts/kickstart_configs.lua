@@ -140,11 +140,10 @@ vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { des
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
-vim.keymap.set('n', '<leader>sG', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by [G]rep on Git Root' })
+vim.keymap.set('n', '<leader>sg', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by [G]rep on Git Root' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
 vim.keymap.set('n', '<leader>fb', require('telescope.builtin').git_branches, {})
-vim.keymap.set('n', '<leader>fm', require('telescope.builtin').git_branches, {})
 vim.keymap.set('n', '<leader>fo', require('telescope.builtin').oldfiles, { desc = '[F]ind recently [o]pened files' })
 vim.keymap.set('n', '<leader>fc', require('telescope.builtin').grep_string, { desc = '[F]ind string under cursor in [c]wd' })
 require("telescope").load_extension("dir")
@@ -304,13 +303,25 @@ require('mason-lspconfig').setup()
 --  define the property 'filetypes' to the map in question.
 local servers = {
   -- clangd = {},
-  gopls = {},
-  -- pyright = {},
+  gopls = {
+    filetypes = { "go", "gomod", "tmpl" },
+    settings = {
+      gopls = {
+        analyses = {
+          unusedparams = true,
+        },
+        staticcheck = true,
+        gofumpt = true,
+      },
+    },
+  },
+  templ = {},
   -- rust_analyzer = {},
   tsserver = {},
-  html = { filetypes = { 'html', 'twig', 'hbs'} },
+  pyright = {},
+  html = { filetypes = { 'html', 'twig', 'hbs', 'templ'} },
   angularls = {},
-
+  htmx = { filetypes = { 'html', 'templ', 'tmpl' }},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
