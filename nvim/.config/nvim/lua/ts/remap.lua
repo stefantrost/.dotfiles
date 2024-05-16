@@ -1,19 +1,12 @@
 -- Set leader
 vim.g.mapleader = " "
--- Colemak remappings
-vim.keymap.set({"n", "v"}, "m", "h")
-vim.keymap.set({"n", "v"}, "n", "j")
-vim.keymap.set({"n", "v"}, "e", "k")
-vim.keymap.set({"n", "v"}, "i", "l")
-vim.keymap.set({"n", "v"}, "l", "i")
-vim.keymap.set({"n", "v"}, "L", "I")
 
 -- Open file tree
-vim.keymap.set("n", "<leader>ft", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>fe", vim.cmd.Ex)
 
 -- move highlighted lines up/down
-vim.keymap.set("v", "N", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "E", ":m '<-2<CR>gv=gv")
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 
 -- keep cursor in position, when appending next line to this line
@@ -24,8 +17,8 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
 -- show found word mid screen when jumping to next/prev
-vim.keymap.set("n", "<leader>n", "nzzzv")
-vim.keymap.set("n", "<leader>N", "Nzzzv")
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv")
 
 -- keep word in paste buffer when replacing other word
 vim.keymap.set("x", "<leader>p", "\"_dP")
@@ -59,8 +52,11 @@ vim.keymap.set("t", "<C-h>", "<C-\\><C-N>")
 vim.keymap.set("n", "<leader>qd", ":set errorformat=%f | cexpr glob(expand('%:p:h')..'/*')<CR>")
 
 -- accept left/right in merge confict view
-vim.keymap.set("n", "<leader>t", ":diffget //2<CR>")
-vim.keymap.set("n", "<leader>n", ":diffget //3<CR>")
+vim.keymap.set("n", "<leader>g", ":diffget //2<CR>")
+vim.keymap.set("n", "<leader>m", ":diffget //3<CR>")
 
 -- restart lsp
-vim.keymap.set("n", "<leader>ls" ,":LspRestart<CR>")
+  vim.keymap.set("n", "<leader>ls" ,":LspRestart<CR>")
+-- Organize Imports needs tsserver config
+vim.keymap.set("n", "<leader>oi", ":OrganizeImports<CR>")
+
