@@ -56,7 +56,7 @@ vim.keymap.set("n", "<leader>g", ":diffget //2<CR>")
 vim.keymap.set("n", "<leader>m", ":diffget //3<CR>")
 
 -- restart lsp
-  vim.keymap.set("n", "<leader>ls" ,":LspRestart<CR>")
+vim.keymap.set("n", "<leader>ls" ,":LspRestart<CR>")
 -- Organize Imports needs tsserver config
 vim.keymap.set("n", "<leader>oi", ":OrganizeImports<CR>")
 
