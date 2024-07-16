@@ -20,9 +20,7 @@ require("lazy").setup({ import = "ts.plugins"}, {
 })
 
 require("ts.kickstart_configs")
-require("ts.diffview")
-require("ts.fugitive")
-require("ts.lsp")
+
 require("ts.trouble")
 require("ts.undotree")
 require("ts.ng")

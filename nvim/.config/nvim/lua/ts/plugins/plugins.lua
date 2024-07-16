@@ -44,6 +44,5 @@ return {
   },
   "windwp/nvim-ts-autotag",
   'nvim-tree/nvim-web-devicons',
-  "sindrets/diffview.nvim",
   'joeveiga/ng.nvim',
 }

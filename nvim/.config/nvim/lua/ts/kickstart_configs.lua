@@ -63,25 +63,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
-local actions = require('telescope.actions')
-require('telescope').setup {
-  defaults = {
-    mappings = {
-      i = {
-        ["<leader><CR>"] = actions.select_vertical,
-      }
-    },
-    path_display = {
-      'truncate'
-    }
-  },
-}
-
--- Enable telescope fzf native, if installed
-pcall(require('telescope').load_extension, 'fzf')
 
 -- Telescope live_grep in git root
 -- Function to find the git root directory based on the current buffer's path
+--[[
 local function find_git_root()
   -- Use the current buffer's path as the starting point for the git search
   local current_file = vim.api.nvim_buf_get_name(0)
@@ -150,6 +135,7 @@ require("telescope").load_extension("dir")
 
 vim.keymap.set("n", "<leader>fd", "<cmd>Telescope dir live_grep<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>pd", "<cmd>Telescope dir find_files<CR>", { noremap = true, silent = true })
+]]--
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
