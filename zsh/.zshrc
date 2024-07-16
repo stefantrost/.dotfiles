@@ -8,6 +8,9 @@ export ZSH="$HOME/.oh-my-zsh"
 # Path to local binaries
 export PATH=~/.local/bin:$PATH
 
+# GO Path
+export PATH="$PATH:$(go env GOPATH)/bin"
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -134,12 +137,6 @@ source <(ng completion script)
 alias rba='npm run start:bestellapp'
 alias ra='npm run start:admin'
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
-
 # Alias for MOBI
 # alias mobi="$HOME/Projects/qubix/intergast/igon360/mobi"
 alias mu="$HOME/Projects/qubix/intergast/igon360/mobi up"
@@ -147,5 +144,26 @@ alias md="$HOME/Projects/qubix/intergast/igon360/mobi stop"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Aliases for fzfed commands
+alias fan='man $(compgen -c | fzf)'
+alias tldf='tldr $(compgen -c | fzf)'
+
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
+
+# Herd injected PHP binary.
+export PATH="/Users/stefantrost/Library/Application Support/Herd/bin/":$PATH
+
+
+# Herd injected PHP 8.2 configuration.
+export HERD_PHP_82_INI_SCAN_DIR="/Users/stefantrost/Library/Application Support/Herd/config/php/82/"
+# MOBI Config Start
+ source /Users/stefantrost/.mobi_aliases
+ # MOBI Config End
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
