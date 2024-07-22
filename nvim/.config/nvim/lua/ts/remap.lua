@@ -2,7 +2,7 @@
 vim.g.mapleader = " "
 
 -- Open file tree
-vim.keymap.set("n", "<leader>fe", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>fe", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 -- move highlighted lines up/down
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -56,7 +56,7 @@ vim.keymap.set("n", "<leader>g", ":diffget //2<CR>")
 vim.keymap.set("n", "<leader>m", ":diffget //3<CR>")
 
 -- restart lsp
-  vim.keymap.set("n", "<leader>ls" ,":LspRestart<CR>")
+vim.keymap.set("n", "<leader>ls" ,":LspRestart<CR>")
 -- Organize Imports needs tsserver config
 vim.keymap.set("n", "<leader>oi", ":OrganizeImports<CR>")
 
