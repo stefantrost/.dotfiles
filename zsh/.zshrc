@@ -148,6 +148,9 @@ alias md="$HOME/Projects/qubix/intergast/igon360/mobi stop"
 alias fan='man $(compgen -c | fzf)'
 alias tldf='tldr $(compgen -c | fzf)'
 
+# Aliases for other commands
+alias mergemaster='GIT_CURRENT=$(git branch --show-current) && git switch master && git pull && git switch $GIT_CURRENT && git merge master'
+
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
