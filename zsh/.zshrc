@@ -15,7 +15,7 @@ export PATH="$PATH:$(go env GOPATH)/bin"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="spaceship"
+source $(brew --prefix)/opt/spaceship/spaceship.zsh
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -81,12 +81,13 @@ echo "$TODAY — day no $CURRENT_NO_DAY of $DAYS_IN_YEAR, $TIME"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git npm zsh-autosuggestions)
+plugins=(git npm)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -170,3 +171,4 @@ export HERD_PHP_82_INI_SCAN_DIR="/Users/stefantrost/Library/Application Support/
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
