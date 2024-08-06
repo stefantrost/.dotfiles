@@ -1,6 +1,5 @@
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:/usr/bin/python3:$PATH
-export PATH=~/.jetbrains-launchers:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -11,17 +10,8 @@ export PATH=~/.local/bin:$PATH
 # GO Path
 export PATH="$PATH:$(go env GOPATH)/bin"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+# Load spaceship theme
 source $(brew --prefix)/opt/spaceship/spaceship.zsh
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # display current date and time
 echo
@@ -54,11 +44,6 @@ zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 plugins=(git npm)
 
 source $ZSH/oh-my-zsh.sh
@@ -77,9 +62,6 @@ alias dj:migrations="dj:man makemigrations"
 alias dj:run="dj:man runserver"
 alias dj:shell="dj:man shell"
 alias dj:test="dj:man test"
-
-alias rba='npm run start:bestellapp'
-alias ra='npm run start:admin'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
