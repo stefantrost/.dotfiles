@@ -168,7 +168,7 @@ return { -- LSP Configuration & Plugins
 			},
 			emmet_ls = {
 				capabilities = capabilities,
-				filetypes = { "css", "html", "javascript", "vue", "scss", "templ" },
+				filetypes = { "css", "html", "javascript", "vue", "scss", "templ", "php", "blade" },
 				init_options = {
 					html = {
 						options = {
