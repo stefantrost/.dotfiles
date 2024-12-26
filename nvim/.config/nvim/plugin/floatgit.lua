@@ -11,7 +11,7 @@ local state = {
     },
   },
 }
-function create_floating_commit(opts)
+function Create_floating_commit(opts)
   opts = opts or {}
   local width = opts.width or math.floor(vim.o.columns)
   local height = opts.height or math.floor(vim.o.lines)
@@ -92,7 +92,7 @@ end
 
 local function toggle_float_commit()
   if not vim.api.nvim_win_is_valid(state.floating.commit.win) then
-    state.floating.commit = create_floating_commit { buf = state.floating.commit.buf }
+    state.floating.commit = Create_floating_commit { buf = state.floating.commit.buf }
   else
     vim.api.nvim_win_hide(state.floating.commit.win)
     vim.api.nvim_win_hide(state.floating.commit.commit_win)
