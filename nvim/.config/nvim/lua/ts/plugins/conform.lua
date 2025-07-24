@@ -34,6 +34,7 @@ return { -- Autoformat
       javascript = { { "prettier" } },
       typescript = { "prettier" },
       html = { "prettier" },
+      htmlangular = { "prettier" },
     },
   },
 }

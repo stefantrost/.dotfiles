@@ -1,5 +1,6 @@
 return {
   "pasky/claude.vim",
+  enabled = false,
   lazy = false,
   config = function()
     -- Load API key from environment variable

@@ -105,6 +105,7 @@ return { -- LSP Configuration & Plugins
     --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
 
     local ok, mason_registry = pcall(require, "mason-registry")
     if not ok then
@@ -112,7 +113,7 @@ return { -- LSP Configuration & Plugins
       return
     end
 
-    local angularls_path = mason_registry.get_package("angular-language-server"):get_install_path()
+    local angularls_path = vim.fn.expand "$MASON/packages/angular-language-server/"
 
     local angular_cmd = {
       "ngserver",
@@ -168,7 +169,7 @@ return { -- LSP Configuration & Plugins
       },
       emmet_ls = {
         capabilities = capabilities,
-        filetypes = { "css", "html", "javascript", "vue", "scss", "templ", "php", "blade" },
+        filetypes = { "css", "html", "javascript", "vue", "scss", "templ", "php", "blade", "htmlangular" },
         init_options = {
           html = {
             options = {
@@ -177,36 +178,13 @@ return { -- LSP Configuration & Plugins
           },
         },
       },
-      angularls = {
-        cmd = angular_cmd,
-        root_dir = require("lspconfig.util").root_pattern("angular.json", "project.json"),
-        on_new_config = function(new_config, new_root_dir)
-          new_config.cmd = angular_cmd
-        end,
-      },
-      ts_ls = {
-        init_options = {
-          preferences = {
-            -- other preferences...
-            importModuleSpecifierPreference = "relative",
-            importModuleSpecifierEnding = "minimal",
-          },
-        },
-        commands = {
-          OrganizeImports = {
-            function()
-              local params = {
-                command = "_typescript.organizeImports",
-                arguments = { vim.api.nvim_buf_get_name(0) },
-                title = "",
-              }
-              vim.lsp.buf.execute_command(params)
-            end,
-            description = "Organize Imports",
-          },
-        },
-        sqls = {},
-      },
+      -- angularls = {
+      --   cmd = angular_cmd,
+      --   root_dir = require("lspconfig.util").root_pattern("angular.json", "project.json"),
+      --   on_new_config = function(new_config, new_root_dir)
+      --     new_config.cmd = angular_cmd
+      --   end,
+      -- },
     }
 
     -- Ensure the servers and tools above are installed
