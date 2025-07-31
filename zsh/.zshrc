@@ -77,13 +77,13 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 
 
 
-# Herd injected PHP 8.3 configuration.
-export HERD_PHP_83_INI_SCAN_DIR="/Users/stefan/Library/Application Support/Herd/config/php/83/"
-
-
-# Herd injected PHP binary.
-export PATH="/Users/stefan/Library/Application Support/Herd/bin/":$PATH
-
+# # Herd injected PHP 8.3 configuration.
+# export HERD_PHP_83_INI_SCAN_DIR="/Users/stefan/Library/Application Support/Herd/config/php/83/"
+#
+#
+# # Herd injected PHP binary.
+# export PATH="/Users/stefan/Library/Application Support/Herd/bin/":$PATH
+#
 
 # # Herd injected NVM configuration
 # export NVM_DIR="/Users/stefan/Library/Application Support/Herd/config/nvm"
@@ -92,5 +92,23 @@ export PATH="/Users/stefan/Library/Application Support/Herd/bin/":$PATH
 # [[ -f "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh" ]] && builtin source "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh"
 
 
-# Herd injected PHP 8.4 configuration.
-export HERD_PHP_84_INI_SCAN_DIR="/Users/stefan/Library/Application Support/Herd/config/php/84/"
+# # Herd injected PHP 8.4 configuration.
+# export HERD_PHP_84_INI_SCAN_DIR="/Users/stefan/Library/Application Support/Herd/config/php/84/"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/homebrew/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/homebrew/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/opt/homebrew/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/homebrew/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+export MCP_CONFIG_PATH="$HOME/.claude/mcp.json"
+
