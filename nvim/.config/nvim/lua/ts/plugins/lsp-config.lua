@@ -178,13 +178,13 @@ return { -- LSP Configuration & Plugins
           },
         },
       },
-      -- angularls = {
-      --   cmd = angular_cmd,
-      --   root_dir = require("lspconfig.util").root_pattern("angular.json", "project.json"),
-      --   on_new_config = function(new_config, new_root_dir)
-      --     new_config.cmd = angular_cmd
-      --   end,
-      -- },
+      angularls = {
+        cmd = angular_cmd,
+        root_dir = require("lspconfig.util").root_pattern("angular.json", "project.json"),
+        on_new_config = function(new_config, new_root_dir)
+          new_config.cmd = angular_cmd
+        end,
+      },
     }
 
     -- Ensure the servers and tools above are installed
@@ -200,6 +200,7 @@ return { -- LSP Configuration & Plugins
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
       "stylua", -- Used to format Lua code
+      "angular-language-server", -- Angular Language Server
     })
     require("mason-tool-installer").setup { ensure_installed = ensure_installed }
 
@@ -215,5 +216,8 @@ return { -- LSP Configuration & Plugins
         end,
       },
     }
+
+    -- Enable Angular Language Server with modern API
+    vim.lsp.enable('angularls')
   end,
 }
