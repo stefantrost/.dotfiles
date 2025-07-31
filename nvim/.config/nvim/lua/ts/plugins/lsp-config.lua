@@ -113,22 +113,28 @@ return { -- LSP Configuration & Plugins
       return
     end
 
-    local angularls_path = vim.fn.expand "$MASON/packages/angular-language-server/"
-
-    local angular_cmd = {
-      "ngserver",
-      "--stdio",
-      "--tsProbeLocations",
-      table.concat({
-        angularls_path,
-        vim.uv.cwd(),
-      }, ","),
-      "--ngProbeLocations",
-      table.concat({
-        angularls_path .. "/node_modules/@angular/language-server",
-        vim.uv.cwd(),
-      }, ","),
-    }
+    -- Helper function to find Angular Language Server path (similar to LazyVim's get_pkg_path)
+    local function get_angular_ls_path()
+      local mason_path = vim.fn.expand "$MASON/packages/angular-language-server/"
+      local angular_ls_path = mason_path .. "node_modules/@angular/language-server"
+      
+      -- Check if the path exists
+      if vim.fn.isdirectory(angular_ls_path) == 1 then
+        return angular_ls_path
+      end
+      
+      -- Fallback: try to find in project node_modules  
+      local cwd = vim.uv.cwd()
+      if cwd then
+        local project_path = cwd .. "/node_modules/@angular/language-server"
+        if vim.fn.isdirectory(project_path) == 1 then
+          return project_path
+        end
+      end
+      
+      -- Return Mason path as last resort
+      return angular_ls_path
+    end
 
     -- Enable the following language servers
     --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -150,8 +156,21 @@ return { -- LSP Configuration & Plugins
       --    https://github.com/pmizio/typescript-tools.nvim
       --
       -- But for many setups, the LSP (`tsserver`) will work just fine
-      -- tsserver = {},
-      --
+      ts_ls = {
+        settings = {
+          typescript = {
+            tsserver = {
+              globalPlugins = {
+                {
+                  name = "@angular/language-server",
+                  location = get_angular_ls_path(),
+                  enableForWorkspaceTypeScriptVersions = false,
+                }
+              }
+            }
+          }
+        }
+      },
 
       lua_ls = {
         -- cmd = {...},
@@ -179,10 +198,10 @@ return { -- LSP Configuration & Plugins
         },
       },
       angularls = {
-        cmd = angular_cmd,
-        root_dir = require("lspconfig.util").root_pattern("angular.json", "project.json"),
-        on_new_config = function(new_config, new_root_dir)
-          new_config.cmd = angular_cmd
+        -- Simple configuration - let Angular LS focus on Angular-specific features
+        on_attach = function(client, bufnr)
+          -- Disable rename provider to prevent conflicts with TypeScript server
+          client.server_capabilities.renameProvider = false
         end,
       },
     }
@@ -217,7 +236,5 @@ return { -- LSP Configuration & Plugins
       },
     }
 
-    -- Enable Angular Language Server with modern API
-    vim.lsp.enable('angularls')
   end,
 }
