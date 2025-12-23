@@ -114,5 +114,6 @@ return { -- Fuzzy Finder (files, lsp, etc)
     end, { desc = "[S]earch [N]eovim files" })
 
     require("ts.extensions.telescope-glob-grep").setup()
+    require("ts.extensions.telescope-nx-projects").setup()
   end,
 }

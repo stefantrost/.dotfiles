@@ -9,7 +9,7 @@ return {
       -- - `npm nx`
       -- - `yarn nx`
       -- - `pnpm nx`
-      nx_cmd_root = "nx",
+      nx_cmd_root = "npx nx",
 
       -- Command running capabilities,
       -- see nx.m.command-runners for more details
