@@ -110,7 +110,7 @@ local function create_project_picker(opts, on_select_callback)
           actions.close(prompt_bufnr)
           if selection then
             local project_root = get_project_root(nx_root, selection.value)
-            on_select_callback(project_root, nx_root)
+            on_select_callback(project_root, nx_root, selection.value)
           end
         end)
         return true
@@ -121,7 +121,7 @@ end
 
 -- Pick a project and open it in file explorer
 local function nx_pick_project(opts)
-  create_project_picker(opts, function(project_root)
+  create_project_picker(opts, function(project_root, nx_root, project_name)
     -- Use Oil.nvim API to open directory
     local ok, oil = pcall(require, "oil")
     if ok then
@@ -135,15 +135,21 @@ end
 
 -- Pick a project and find files within it
 local function nx_find_files(opts)
-  create_project_picker(opts, function(project_root)
-    require("telescope.builtin").find_files { cwd = project_root }
+  create_project_picker(opts, function(project_root, nx_root, project_name)
+    require("telescope.builtin").find_files {
+      cwd = project_root,
+      prompt_title = string.format("Find Files [%s]", project_name),
+    }
   end)
 end
 
 -- Pick a project and grep within it
 local function nx_grep(opts)
-  create_project_picker(opts, function(project_root)
-    require("telescope.builtin").live_grep { cwd = project_root }
+  create_project_picker(opts, function(project_root, nx_root, project_name)
+    require("telescope.builtin").live_grep {
+      cwd = project_root,
+      prompt_title = string.format("Live Grep [%s]", project_name),
+    }
   end)
 end
 

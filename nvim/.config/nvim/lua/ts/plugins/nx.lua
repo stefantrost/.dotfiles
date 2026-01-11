@@ -3,6 +3,9 @@ return {
   dependencies = {
     "nvim-telescope/telescope.nvim",
   },
+  keys = {
+    { "<leader>nx", "<cmd>Telescope nx actions<CR>", desc = "Nx actions" },
+  },
   config = function()
     require("nx").setup {
       -- Base command to run all other nx commands, some other values may be:

@@ -64,7 +64,7 @@ return { -- LSP Configuration & Plugins
         --
         -- When you move your cursor, the highlights will be cleared (the second autocommand).
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
           local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
           vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
             buffer = event.buf,
@@ -91,7 +91,7 @@ return { -- LSP Configuration & Plugins
         -- code, if the language server you are using supports them
         --
         -- This may be unwanted, since they displace some of your code
-        if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
           map("<leader>th", function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
           end, "[T]oggle Inlay [H]ints")
@@ -117,13 +117,13 @@ return { -- LSP Configuration & Plugins
     local function get_angular_ls_path()
       local mason_path = vim.fn.expand "$MASON/packages/angular-language-server/"
       local angular_ls_path = mason_path .. "node_modules/@angular/language-server"
-      
+
       -- Check if the path exists
       if vim.fn.isdirectory(angular_ls_path) == 1 then
         return angular_ls_path
       end
-      
-      -- Fallback: try to find in project node_modules  
+
+      -- Fallback: try to find in project node_modules
       local cwd = vim.uv.cwd()
       if cwd then
         local project_path = cwd .. "/node_modules/@angular/language-server"
@@ -131,7 +131,7 @@ return { -- LSP Configuration & Plugins
           return project_path
         end
       end
-      
+
       -- Return Mason path as last resort
       return angular_ls_path
     end
@@ -165,11 +165,11 @@ return { -- LSP Configuration & Plugins
                   name = "@angular/language-server",
                   location = get_angular_ls_path(),
                   enableForWorkspaceTypeScriptVersions = false,
-                }
-              }
-            }
-          }
-        }
+                },
+              },
+            },
+          },
+        },
       },
 
       lua_ls = {
@@ -186,6 +186,42 @@ return { -- LSP Configuration & Plugins
           },
         },
       },
+      html = {
+        capabilities = capabilities,
+        filetypes = { "html", "templ" },
+        init_options = {
+          configurationSection = { "html", "css", "javascript" },
+          embeddedLanguages = {
+            css = true,
+            javascript = true,
+          },
+          provideFormatter = true,
+        },
+      },
+      cssls = {
+        capabilities = capabilities,
+        filetypes = { "css", "scss", "less" },
+        settings = {
+          css = {
+            validate = true,
+            lint = {
+              unknownAtRules = "ignore",
+            },
+          },
+          scss = {
+            validate = true,
+            lint = {
+              unknownAtRules = "ignore",
+            },
+          },
+          less = {
+            validate = true,
+            lint = {
+              unknownAtRules = "ignore",
+            },
+          },
+        },
+      },
       emmet_ls = {
         capabilities = capabilities,
         filetypes = { "css", "html", "javascript", "vue", "scss", "templ", "php", "blade", "htmlangular" },
@@ -199,11 +235,94 @@ return { -- LSP Configuration & Plugins
       },
       angularls = {
         -- Simple configuration - let Angular LS focus on Angular-specific features
+        root_dir = function(fname)
+          local util = require "lspconfig.util"
+          -- Only activate in Angular projects (look for angular.json, nx.json, project.json, or package.json with @angular)
+          local angular_root =
+            util.root_pattern("angular.json", ".angular", "nx.json", "workspace.json", "project.json")(fname)
+          if angular_root then
+            return angular_root
+          end
+
+          -- Check if package.json contains Angular dependencies
+          local package_root = util.root_pattern "package.json"(fname)
+          if package_root then
+            local package_json = package_root .. "/package.json"
+            local f = io.open(package_json, "r")
+            if f then
+              local content = f:read "*a"
+              f:close()
+              if content:match '"@angular/' or content:match '"@nx/' then
+                return package_root
+              end
+            end
+          end
+
+          return nil -- Don't activate if no Angular/Nx project detected
+        end,
         on_attach = function(client, bufnr)
           -- Disable rename provider to prevent conflicts with TypeScript server
           client.server_capabilities.renameProvider = false
         end,
       },
+      -- yamlls = {
+      --   capabilities = capabilities,
+      --   settings = {
+      --     yaml = {
+      --       schemas = {
+      --         -- Specific paths that are definitely k8s
+      --         kubernetes = {
+      --           "/k8s/**/*.yaml",
+      --           "/k8s/**/*.yml",
+      --           "/kubernetes/**/*.yaml",
+      --           "/kubernetes/**/*.yml",
+      --           "/manifests/**/*.yaml",
+      --           "/manifests/**/*.yml",
+      --           "/*.k8s.yaml",
+      --           "/*.k8s.yml",
+      --         },
+      --         -- You can also add the direct schema URL for more explicit control
+      --         ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = {
+      --           "k8s/**/*.yaml",
+      --           "k8s/**/*.yml",
+      --         },
+      --         -- Docker Compose support
+      --         ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
+      --           "*docker-compose*.yml",
+      --           "*docker-compose*.yaml",
+      --         },
+      --       },
+      --       validate = true,
+      --       schemaStore = {
+      --         enable = true, -- This enables auto-detection for other files
+      --         url = "https://www.schemastore.org/api/json/catalog.json",
+      --       },
+      --       format = {
+      --         enable = true,
+      --         singleQuote = false,
+      --         bracketSpacing = true,
+      --       },
+      --       hover = true,
+      --       completion = true,
+      --       customTags = {
+      --         "!Ref",
+      --         "!Condition",
+      --         "!Sub",
+      --         "!GetAtt",
+      --         "!ImportValue",
+      --         "!Select",
+      --         "!Split",
+      --         "!Join sequence",
+      --       },
+      --     },
+      --     redhat = {
+      --       telemetry = {
+      --         enabled = false,
+      --       },
+      --     },
+      --   },
+      --   filetypes = { "yaml", "yml" },
+      -- },
     }
 
     -- Ensure the servers and tools above are installed
@@ -219,7 +338,10 @@ return { -- LSP Configuration & Plugins
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
       "stylua", -- Used to format Lua code
-      "angular-language-server", -- Angular Language Server
+      "angular-language-server",
+      "yaml-language-server",
+      "html-lsp", -- HTML Language Server
+      "css-lsp", -- CSS Language Server
     })
     require("mason-tool-installer").setup { ensure_installed = ensure_installed }
 
@@ -235,6 +357,5 @@ return { -- LSP Configuration & Plugins
         end,
       },
     }
-
   end,
 }

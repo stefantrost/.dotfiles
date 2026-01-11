@@ -25,7 +25,10 @@ vim.diagnostic.config {
   virtual_text = {
     source = true,
     format = function(diagnostic)
-      return string.format("%s %s %s", diagnostic.user_data.code, diagnostic.message, diagnostic.source)
+      local code = diagnostic.user_data and diagnostic.user_data.code or ""
+      local source = diagnostic.source or ""
+      local message = diagnostic.message or ""
+      return string.format("%s %s %s", code, message, source):gsub("^%s+", ""):gsub("%s+$", "")
     end,
   },
   signs = true,

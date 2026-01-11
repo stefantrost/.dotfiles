@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ ! -f "nx.json" ]; then
+    echo "Not an nx workspace, no nx.json found"
+    exit 1
+fi
+
+project_name=$(npx nx show projects | fzf --prompt="Select Nx project: " --height=40% --border)
+
+if [[ -n "$project_name" ]]; then
+    project_path=$(npx nx show project "$project_name" --json | jq -r '.root')
+    echo "Opening $project_name at $project_path in nvim..."
+    cd "$project_path" && nvim .
+fi

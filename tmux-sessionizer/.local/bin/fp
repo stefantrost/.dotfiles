@@ -1,0 +1,121 @@
+#!/bin/bash
+# fp - Fuzzy Pod Selector
+# Save as ~/bin/fp and make executable: chmod +x ~/bin/fp
+
+# Check if fzf is available
+if ! command -v fzf &> /dev/null; then
+    echo "Error: fzf is required but not installed"
+    echo "Install with: brew install fzf (macOS) or apt install fzf (Ubuntu)"
+    exit 1
+fi
+
+# Check if kubectl is available
+if ! command -v kubectl &> /dev/null; then
+    echo "Error: kubectl is required but not installed"
+    exit 1
+fi
+
+# Main function
+main() {
+    local cmd="kubectl get pods"
+    local extra_args=""
+    
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -n|--namespace)
+                cmd="$cmd -n $2"
+                shift 2
+                ;;
+            -A|--all-namespaces)
+                cmd="$cmd --all-namespaces"
+                extra_args="--with-namespace"
+                shift
+                ;;
+            -l|--selector)
+                cmd="$cmd -l $2"
+                shift 2
+                ;;
+            --field-selector)
+                cmd="$cmd --field-selector=$2"
+                shift 2
+                ;;
+            -w|--wide)
+                cmd="$cmd -o wide"
+                shift
+                ;;
+            --running)
+                cmd="$cmd --field-selector=status.phase=Running"
+                shift
+                ;;
+            --failed)
+                cmd="$cmd --field-selector=status.phase=Failed"
+                shift
+                ;;
+            --pending)
+                cmd="$cmd --field-selector=status.phase=Pending"
+                shift
+                ;;
+            --not-running)
+                cmd="$cmd --field-selector=status.phase!=Running"
+                shift
+                ;;
+            -h|--help)
+                cat << EOF
+fp - Fuzzy Pod Selector
+
+Usage: fp [options]
+
+Options:
+  -n, --namespace NAMESPACE    Filter by namespace
+  -A, --all-namespaces         Show pods from all namespaces
+  -l, --selector SELECTOR      Filter by label selector
+  --field-selector SELECTOR    Filter by field selector
+  -w, --wide                   Show wide output
+  --running                    Show only running pods
+  --failed                     Show only failed pods
+  --pending                    Show only pending pods
+  --not-running                Show only non-running pods
+  -h, --help                   Show this help
+
+Examples:
+  fp                           # All pods in current namespace
+  fp --running                 # Only running pods
+  fp -l app=nginx              # Pods with app=nginx label
+  fp -n kube-system            # Pods in kube-system namespace
+  fp -A                        # Pods from all namespaces
+  fp --failed                  # Only failed pods
+
+Output:
+  Returns the selected pod name, or pod name + namespace for -A option
+  Use with other kubectl commands: kubectl logs \$(fp --running)
+
+EOF
+                exit 0
+                ;;
+            *)
+                echo "Error: Unknown option: $1"
+                echo "Use 'fp --help' for usage information"
+                exit 1
+                ;;
+        esac
+    done
+    
+    # Execute the command and pipe to fzf
+    if [[ "$extra_args" == "--with-namespace" ]]; then
+        # For all-namespaces, show namespace in selection
+        eval "$cmd -o custom-columns='NAMESPACE:.metadata.namespace,NAME:.metadata.name' --no-headers" | \
+        fzf --header="Select Pod (Namespace Name format)" \
+            --preview="echo {} | awk '{print \$2\" -n \"\$1}' | xargs kubectl describe pod" \
+            --preview-window=right:60%:wrap | \
+        awk '{print $2 " -n " $1}'
+    else
+        # Regular single namespace
+        eval "$cmd -o custom-columns=NAME:.metadata.name --no-headers" | \
+        fzf --preview="kubectl describe pod {}" \
+            --preview-window=right:60%:wrap
+    fi
+}
+
+# Run main function with all arguments
+main "$@"
