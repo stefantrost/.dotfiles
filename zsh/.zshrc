@@ -112,3 +112,20 @@ unset __conda_setup
 
 export MCP_CONFIG_PATH="$HOME/.claude/mcp.json"
 
+
+# AsyncAPI CLI Autocomplete
+
+ASYNCAPI_AC_ZSH_SETUP_PATH=/Users/stefan/Library/Caches/@asyncapi/cli/autocomplete/zsh_setup && test -f $ASYNCAPI_AC_ZSH_SETUP_PATH && source $ASYNCAPI_AC_ZSH_SETUP_PATH; # asyncapi autocomplete setup
+
+
+# Kubernetes 
+alias k=kubectl
+[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+autoload -U compinit; compinit
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/stefan/.lmstudio/bin"
+# End of LM Studio CLI section
+
+
+alias claude="/Users/stefan/.claude/local/claude"
