@@ -75,6 +75,73 @@ local function get_project_root(nx_root, project_name)
   return nx_root
 end
 
+-- Get project root directory asynchronously using plenary.job
+local function get_project_root_async(nx_root, project_name, callback)
+  local Job = require("plenary.job")
+  local timeout_ms = 30000 -- 30 second timeout
+  local callback_called = false
+  local timer = nil
+
+  local function call_callback_once(...)
+    if not callback_called then
+      callback_called = true
+      if timer then
+        timer:stop()
+        timer:close()
+      end
+      callback(...)
+    end
+  end
+
+  -- Set up timeout timer
+  timer = vim.loop.new_timer()
+  timer:start(timeout_ms, 0, function()
+    vim.schedule(function()
+      if not callback_called then
+        vim.notify(
+          string.format("Timeout getting project info for %s (nx not responding)", project_name),
+          vim.log.levels.WARN
+        )
+        call_callback_once(nx_root) -- fallback to workspace root
+      end
+    end)
+  end)
+
+  local job = Job:new({
+    command = "npx",
+    args = { "nx", "show", "project", project_name },
+    cwd = nx_root,
+    on_exit = function(j, exit_code)
+      vim.schedule(function()
+        if callback_called then
+          return -- timeout already fired
+        end
+
+        if exit_code ~= 0 then
+          vim.notify("Failed to get project info for " .. project_name, vim.log.levels.WARN)
+          call_callback_once(nx_root)  -- fallback to workspace root
+          return
+        end
+
+        local output = table.concat(j:result(), "\n")
+        local ok, project_data = pcall(vim.json.decode, output)
+
+        if ok and project_data and project_data.root then
+          call_callback_once(nx_root .. "/" .. project_data.root)
+        else
+          vim.notify(
+            string.format("Failed to parse project info for %s", project_name),
+            vim.log.levels.WARN
+          )
+          call_callback_once(nx_root)
+        end
+      end)
+    end,
+  })
+
+  job:start()
+end
+
 -- Create a Telescope picker for Nx projects
 local function create_project_picker(opts, on_select_callback)
   opts = opts or {}
@@ -85,32 +152,43 @@ local function create_project_picker(opts, on_select_callback)
     return
   end
 
-  local projects = get_all_projects(nx_root)
-  if #projects == 0 then
-    return
-  end
+  -- Create async job finder
+  local finder = finders.new_async_job {
+    command_generator = function()
+      return {
+        "npx",
+        "nx",
+        "show",
+        "projects",
+      }
+    end,
+    entry_maker = function(line)
+      if not line or line == "" then
+        return nil
+      end
+      return {
+        value = line,
+        display = line,
+        ordinal = line,
+      }
+    end,
+    cwd = nx_root,
+  }
 
   pickers
     .new(opts, {
       prompt_title = "Nx Projects",
-      finder = finders.new_table {
-        results = projects,
-        entry_maker = function(project)
-          return {
-            value = project,
-            display = project,
-            ordinal = project,
-          }
-        end,
-      },
+      finder = finder,
       sorter = conf.generic_sorter(opts),
       attach_mappings = function(prompt_bufnr, map)
         actions.select_default:replace(function()
           local selection = action_state.get_selected_entry()
           actions.close(prompt_bufnr)
           if selection then
-            local project_root = get_project_root(nx_root, selection.value)
-            on_select_callback(project_root, nx_root, selection.value)
+            -- Get project root asynchronously
+            get_project_root_async(nx_root, selection.value, function(project_root)
+              on_select_callback(project_root, nx_root, selection.value)
+            end)
           end
         end)
         return true
