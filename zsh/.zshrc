@@ -129,3 +129,9 @@ export PATH="$PATH:/Users/stefan/.lmstudio/bin"
 
 
 alias claude="/Users/stefan/.claude/local/claude"
+
+# begin forge completion
+. <(forge --completion)
+# end forge completion
+
+ alias nvim-java='NVIM_APPNAME=nvim-java nvim'
