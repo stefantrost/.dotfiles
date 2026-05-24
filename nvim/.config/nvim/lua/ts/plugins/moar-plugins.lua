@@ -1,10 +1,9 @@
 return {
   "joerdav/templ.vim",
-  "nvim-treesitter/playground",
   "nvim-treesitter/nvim-treesitter-context",
   "folke/neodev.nvim",
   "eslint/eslint",
-  "windwp/nvim-ts-autotag",
+  { "windwp/nvim-ts-autotag", opts = {} },
   "nvim-tree/nvim-web-devicons",
   -- Detect tabstop and shiftwidth automatically
   "tpope/vim-sleuth",

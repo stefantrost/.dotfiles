@@ -1,61 +1,50 @@
 return {
-  -- Highlight, edit, and navigate code
   "nvim-treesitter/nvim-treesitter",
+  branch = "main",
+  lazy = false,
+  build = ":TSUpdate",
   dependencies = {
-    "nvim-treesitter/nvim-treesitter-textobjects",
+    { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
     "nvim-treesitter/nvim-treesitter-context",
   },
-  build = ":TSUpdate",
   config = function()
-    local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-    parser_config.blade = {
-      install_info = {
-        url = "https://github.com/EmranMR/tree-sitter-blade",
-        files = { "src/parser.c" },
-        branch = "main",
-      },
-      filetype = "blade",
+    local nts = require("nvim-treesitter")
+    nts.setup {}
+
+    local ensure_installed = {
+      "javascript", "typescript", "tsx", "c", "lua", "vim", "vimdoc",
+      "query", "blade", "html", "css", "json", "yaml", "bash",
+      "markdown", "markdown_inline",
     }
 
-    require("nvim-treesitter.configs").setup {
-      -- A list of parser names, or "all" (the five listed parsers should always be installed)
-      ensure_installed = { "javascript", "typescript", "c", "lua", "vim", "vimdoc", "query", "blade", "html", "css" },
+    local installed = nts.get_installed("parsers")
+    local to_install = vim.tbl_filter(function(lang)
+      return not vim.tbl_contains(installed, lang)
+    end, ensure_installed)
+    if #to_install > 0 then
+      nts.install(to_install)
+    end
 
-      -- Install parsers synchronously (only applied to `ensure_installed`)
-      sync_install = false,
-
-      -- Automatically install missing parsers when entering buffer
-      -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-      auto_install = true,
-
-      autotag = {
-        enable = true,
-      },
-
-      highlight = {
-        enable = true,
-
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false,
-      },
-    }
+    vim.api.nvim_create_autocmd("FileType", {
+      callback = function(args)
+        local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
+        if lang and pcall(vim.treesitter.language.add, lang) then
+          pcall(vim.treesitter.start, args.buf, lang)
+        end
+      end,
+    })
 
     require("treesitter-context").setup {
-      enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
-      max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
-      min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+      enable = true,
+      max_lines = 0,
+      min_window_height = 0,
       line_numbers = true,
-      multiline_threshold = 20, -- Maximum number of lines to show for a single context
-      trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-      mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
-      -- Separator between context and content. Should be a single character string, like '-'.
-      -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+      multiline_threshold = 20,
+      trim_scope = "outer",
+      mode = "cursor",
       separator = nil,
-      zindex = 20, -- The Z-index of the context window
-      on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+      zindex = 20,
+      on_attach = nil,
     }
   end,
 }
