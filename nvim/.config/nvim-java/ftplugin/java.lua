@@ -17,7 +17,7 @@ local mason_registry = require('mason-registry')
 -- Function to get Mason package path
 local function get_mason_path(package_name)
   if mason_registry.is_installed(package_name) then
-    return mason_registry.get_package(package_name):get_install_path()
+    return vim.fn.stdpath('data') .. '/mason/packages/' .. package_name
   end
   vim.notify('Mason package not installed: ' .. package_name, vim.log.levels.WARN)
   return nil
