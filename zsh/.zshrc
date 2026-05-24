@@ -71,6 +71,7 @@ alias tldf='tldr $(compgen -c | fzf)'
 
 # Aliases for other commands
 alias mergemaster='GIT_CURRENT=$(git branch --show-current) && git switch master && git pull && git switch $GIT_CURRENT && git merge master'
+alias rebasemaster='git switch master && git pull && git switch @{-1} && git rebase master'
 
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
@@ -128,10 +129,16 @@ export PATH="$PATH:/Users/stefan/.lmstudio/bin"
 # End of LM Studio CLI section
 
 
-alias claude="/Users/stefan/.claude/local/claude"
 
 # begin forge completion
 . <(forge --completion)
 # end forge completion
 
  alias nvim-java='NVIM_APPNAME=nvim-java nvim'
+
+# bun completions
+[ -s "/Users/stefan/.bun/_bun" ] && source "/Users/stefan/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
